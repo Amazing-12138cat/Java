@@ -11,5 +11,6 @@ public class Simplearrays {
                 System.out.println(j);
             }
         }
+        System.out.println(Arrays.deepToString(ns));
     }
 }
