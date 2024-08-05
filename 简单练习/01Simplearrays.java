@@ -1,5 +1,5 @@
 import java.util.Arrays;
-public class Simplearrays {
+public class 01Simplearrays {
     public static void main(String[] args) {
         int[][] ns = {
                 { 1, 2, 3, 4 },
