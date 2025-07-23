@@ -1,0 +1,46 @@
+package com.xxx.reflection;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ReflectionDemo2 {
+    public static void main(String[] args) throws Exception{
+        // ========= 1. 获取ProcessBuilder的Class对象 =========
+        Class<?> prcessClass = Class.forName("java.lang.ProcessBuilder");
+
+        // ========= 2. 获取构造方法 =========
+        // 获取接受List<String>参数的构造器
+        Constructor<?> listConstructor = prcessClass.getConstructor(List.class);
+
+        // ========= 3. 创建命令列表 =========
+        List<String> command = new ArrayList<>();
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            command.add("explorer.exe");
+            command.add("C:\\");
+        } else {
+            command.add("open");
+            command.add("/");
+        }
+
+        // ========= 4. 创建ProcessBuilder实例 =========
+        Object processBuilder = listConstructor.newInstance(command);
+
+        // ========= 5. 获取start方法 =========
+        Method startMethod = prcessClass.getMethod("start");
+
+        // ========= 6. 执行命令 =========
+        Process process = (Process) startMethod.invoke(processBuilder);
+
+        // ========= 7. 等待命令执行 =========
+        Method waitForMethod = Process.class.getMethod("waitFor");
+        int exitCode = (Integer) waitForMethod.invoke(process);
+
+        // ========= 8. 获取退出值 =========
+        Method exitValueMethod = Process.class.getMethod("exitValue");
+        System.out.println("命令执行完成，退出码: " + exitValueMethod.invoke(process));
+
+    }
+}
