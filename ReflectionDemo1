@@ -1,0 +1,24 @@
+package com.xxx.reflection;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+public class ReflectionDemo1 {
+    public static void main(String[] args) throws Exception {
+        // 1. 获取 Runtime 的 Class 对象
+        Class<?> runtimeClass = Class.forName("java.lang.Runtime");
+
+        // 2. 获取私有构造器并设置可访问
+        Constructor<?> constructor = runtimeClass.getDeclaredConstructor();
+        constructor.setAccessible(true);
+
+        // 3. 创建 Runtime 实例（等价于 Runtime.getRuntime()）
+        Object run= constructor.newInstance();
+
+        // 4. 获取 exec 方法
+        Method execMethod = runtimeClass.getMethod("exec", String.class);
+
+        // 5. 调用 exec 方法执行命令（例如打开文件夹）
+        Process process = (Process) execMethod.invoke(run,"open /");
+    }
+}
